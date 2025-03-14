@@ -67,7 +67,7 @@ if not abort:
 
     #printArr()
     stringLen = len(findString)
-    printLines = tailLen
+    printLines = tailLen +1
     #print("Output is: ")
     # searching code
     for i in range(len(inputText)): # for each line in inputText
