@@ -92,6 +92,10 @@ if not abort:
                 foundString = True
             j += 1
 
+        
+
         if printLines <= tailLen: # if tail length hasn't reached above tailLen, keep printing lines
+            if lineNumbers:
+                currLine = "Line " + str(i +1) + ": " + currLine 
             printLines += 1
             print(currLine)
