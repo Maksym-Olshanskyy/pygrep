@@ -67,7 +67,7 @@ if not abort:
 
     #printArr()
     stringLen = len(findString)
-    nonMatchLines = tailLen
+    printLines = tailLen
     #print("Output is: ")
     # searching code
     for i in range(len(inputText)): # for each line in inputText
@@ -85,18 +85,13 @@ if not abort:
                     foundString = False
                     break # don't keep searching if string isn't matching
             if foundString:
-                printLine = True
+                printLines = 0
                 print("Index " + str(j) + " - " + str(j + stringLen -1) + ", ", end="")
                 j += stringLen -1 # jump over found string, because finding the string inside itself is impossible.
             else:
                 foundString = True
             j += 1
 
-        if printLine: # if there is an occurance, reset tail length
-            nonMatchLines = 0
-            print(inputText[i])
-            printLine = False
-        elif nonMatchLines < tailLen: # if tail length hasn't reached tailLen, keep printing lines
-            nonMatchLines += 1
-            print(inputText[i])
-            printLine = False
+        if printLines <= tailLen: # if tail length hasn't reached above tailLen, keep printing lines
+            printLines += 1
+            print(currLine)
