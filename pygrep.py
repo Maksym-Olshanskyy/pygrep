@@ -1,11 +1,31 @@
 import sys
+import os
 import time
+
+def ReadFromStdin():
+    saveArr = []
+    while True:
+            try:
+                saveArr.append(input())
+            except EOFError:
+                # no more information
+                break
+    return saveArr
+
+def ReadFromFile(fileName):
+    saveArr = []
+    with open(fileName, newline='') as file:
+        for line in file:
+            saveArr.append(line.rstrip("\n"))
+    return saveArr
 
 # args
 findString = ""
 lineNumbers = False
 tail = False
 tailLen = 0
+readFile = False
+fileName = ""
 
 #argument handling code
 abort = False
@@ -16,14 +36,31 @@ while i < len(sys.argv):
         case "-l":
             lineNumbers = True
         case "-t":
-            tail = True
             i += 1
             if i < len(sys.argv):
+                tail = True
                 tailLen = int(sys.argv[i])
             else:
                 print("pygrep: no quantity of lines given for -t, Aborting.")
                 abort = True
                 getHelp = True
+        case "-i":
+            i += 1
+            if i < len(sys.argv): # check if file path is given
+                readFile = True
+                fileName = sys.argv[i]
+                if not os.path.exists(fileName): # check if file exists
+                    print("pygrep: input file doesn't exist, Aborting.")
+                    abort = True
+                elif not os.access(fileName, os.R_OK): # check if file is readable 
+                    print("pygrep: input file permission denied, Aborting.")
+                    abort = True
+            else:
+                print("pygrep: no input file name given, Aborting.")
+                abort = True
+                getHelp = True
+            # after all this code is done, and abort flag is off, should be safe to read file
+            # without try/catch
         case "-h":
             print("Usage: [input text] | python pygrep [-h][-t num][-l] \"search string\"")
             print("  -h     : you are here!")
@@ -49,23 +86,12 @@ if getHelp:
     print("pygrep -h for help")
 
 if not abort:
-    
-    inputText = []
-    def printArr():
-        print('Input is:')
-        for i in inputText: 
-            print(i)
 
-    #read & store each line as individual item in list
-    while True:
-            try:
-                inputText.append(input())
-            except EOFError:
-                # no more information
-                break
+    if readFile:
+        inputText = ReadFromFile(fileName)
+    else:
+        inputText = ReadFromStdin()
 
-
-    #printArr()
     stringLen = len(findString)
     printLines = tailLen +1
     #print("Output is: ")
@@ -91,8 +117,6 @@ if not abort:
             else:
                 foundString = True
             j += 1
-
-        
 
         if printLines <= tailLen: # if tail length hasn't reached above tailLen, keep printing lines
             if lineNumbers:
