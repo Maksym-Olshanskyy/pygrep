@@ -26,6 +26,7 @@ tail = False
 tailLen = 0
 readFile = False
 fileName = ""
+color = True
 
 #argument handling code
 abort = False
@@ -61,8 +62,10 @@ while i < len(sys.argv):
                 getHelp = True
             # after all this code is done, and abort flag is off, should be safe to read file
             # without try/catch
+        case "-c":
+            color = False
         case "-h":
-            print("Usage: [input text] | python pygrep [-h][-t num][-l] \"search string\"")
+            print("\033[1;31mUsage: [input text] | python pygrep [-h][-t num][-l] \"search string\" \033[0m")
             print("  -h     : you are here!")
             print("  -l     : prints line numbers in front of each line")
             print("  -t num : tail, quantity of lines to print after a line with a match. ")
@@ -98,6 +101,7 @@ if not abort:
     # searching code
     for i in range(len(inputText)): # for each line in inputText
         currLine = inputText[i]
+        indexes = []
         
         foundString = True
         printLine = False
@@ -113,12 +117,21 @@ if not abort:
             if foundString:
                 printLines = 0
                 print("Index " + str(j) + " - " + str(j + stringLen -1) + ", ", end="")
+                indexes.append(j) # starting index
+                indexes.append(j + stringLen) # ending index
+                
                 j += stringLen -1 # jump over found string, because finding the string inside itself is impossible.
             else:
                 foundString = True
             j += 1
 
         if printLines <= tailLen: # if tail length hasn't reached above tailLen, keep printing lines
+            if color:
+                k = len(indexes) -2
+                while k >= 0:
+                    currLine = currLine[:indexes[k+1]] + "\033[0m" + currLine[indexes[k+1]:] # reset color
+                    currLine = currLine[:indexes[k]] + "\033[1;31m" + currLine[indexes[k]:] # set color
+                    k -= 2
             if lineNumbers:
                 currLine = "Line " + str(i +1) + ": " + currLine 
             printLines += 1
