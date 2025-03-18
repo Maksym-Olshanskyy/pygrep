@@ -26,6 +26,8 @@ tail = False
 tailLen = 0
 readFile = False
 fileName = ""
+writeFile = False
+fileToWrite = ""
 color = True
 
 #argument handling code
@@ -62,6 +64,24 @@ while i < len(sys.argv):
                 getHelp = True
             # after all this code is done, and abort flag is off, should be safe to read file
             # without try/catch
+        case "-o":
+            i += 1
+            if i < len(sys.argv): # check if file path is given
+                writeFile = True
+                writeFileName = sys.argv[i]
+                if not os.path.exists(writeFileName): # check if file exists
+                    print("pygrep: output file doesn't exist, Aborting.")
+                    abort = True
+                elif not os.access(writeFileName, os.W_OK): # check if file is writable 
+                    print("pygrep: output file permission denied, Aborting.")
+                    abort = True
+                else: # if file exists and is writable, open for writing. 
+                      # should be safe to open file at this point
+                    fileToWrite = open(writeFileName, "a") # open file append mode
+            else:
+                print("pygrep: no output file name given, Aborting.")
+                abort = True
+                getHelp = True
         case "-c":
             color = False
         case "-h":
@@ -123,7 +143,7 @@ if not abort:
             j += 1
 
         if printLines <= tailLen: # if tail length hasn't reached above tailLen, keep printing lines
-            if color:
+            if color and not writeFile:
                 k = len(indexes) -1
                 while k >= 0:
                     currLine = currLine[:indexes[k] + stringLen] + "\033[0m" + currLine[indexes[k] + stringLen:] # reset color
@@ -132,4 +152,7 @@ if not abort:
             if lineNumbers:
                 currLine = "Line " + str(i +1) + ": " + currLine 
             printLines += 1
-            print(currLine)
+            if writeFile: 
+                fileToWrite.write(currLine + "\n")
+            else: 
+                print(currLine)
