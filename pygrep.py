@@ -1,3 +1,4 @@
+#!/bin/python
 import sys
 import os
 import time
@@ -43,9 +44,13 @@ while i < len(sys.argv):
             ignoreCase = False
         case "-t":
             i += 1
-            if i < len(sys.argv):
-                tail = True
+            if i < len(sys.argv): # if value exists
                 tailLen = int(sys.argv[i])
+                if tailLen >= 0: 
+                    tail = True
+                else:
+                    print("pygrep: tail length out of range, Aborting.")
+                    abort = True
             else:
                 print("pygrep: no quantity of lines given for -t, Aborting.")
                 abort = True
@@ -90,8 +95,14 @@ while i < len(sys.argv):
         case "-c":
             color = False
         case "-h":
-            print("\033[1;31mUsage: [input text] | python pygrep [-h][-t num][-l] \"search string\" \033[0m")
+            print("Usage: [input text] | python pygrep [-t num][-l][-C][-c] \"search string\"")
+            print("       [input text] | python pygrep [-t num][-l][-C][-o filename] \"search string\"")
+            print("       python pygrep [-t num][-l][-C][-i = inputFile][-o outputFile] \"search string\"")
             print("  -h     : you are here!")
+            print("  -c     : disable color highlight")
+            print("  -C     : case sensitive")
+            print("  -i file: read data from this file instead of stdin")
+            print("  -o file: write output to this file instead of stdout")
             print("  -l     : prints line numbers in front of each line")
             print("  -t num : tail, quantity of lines to print after a line with a match. ")
         case _ :
@@ -166,3 +177,5 @@ if not abort:
                 fileToWrite.write(currLine + "\n")
             else: 
                 print(currLine)
+if writeFile:
+    fileToWrite.close()           
