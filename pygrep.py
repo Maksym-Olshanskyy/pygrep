@@ -58,7 +58,7 @@ while i < len(sys.argv):
                 elif not os.access(fileName, os.R_OK): # check if file is readable 
                     print("pygrep: input file permission denied, Aborting.")
                     abort = True
-            else:
+            else: # no file path given
                 print("pygrep: no input file name given, Aborting.")
                 abort = True
                 getHelp = True
@@ -69,16 +69,18 @@ while i < len(sys.argv):
             if i < len(sys.argv): # check if file path is given
                 writeFile = True
                 writeFileName = sys.argv[i]
-                if not os.path.exists(writeFileName): # check if file exists
-                    print("pygrep: output file doesn't exist, Aborting.")
+                try:
+                    fileToWrite = open(writeFileName, "a")
+                except FileNotFoundError: # if folder path doesn't exist
+                    print("pygrep: output directory doesn't exist, Aborting.")
                     abort = True
-                elif not os.access(writeFileName, os.W_OK): # check if file is writable 
+                except PermissionError: # if file is unwritable
                     print("pygrep: output file permission denied, Aborting.")
                     abort = True
-                else: # if file exists and is writable, open for writing. 
-                      # should be safe to open file at this point
-                    fileToWrite = open(writeFileName, "a") # open file append mode
-            else:
+                except: #anything else
+                    print("pygrep: output file error, Aborting.")
+                    abort = True
+            else: # no file path given
                 print("pygrep: no output file name given, Aborting.")
                 abort = True
                 getHelp = True
