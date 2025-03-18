@@ -116,10 +116,7 @@ if not abort:
                     break # don't keep searching if string isn't matching
             if foundString:
                 printLines = 0
-                print("Index " + str(j) + " - " + str(j + stringLen -1) + ", ", end="")
                 indexes.append(j) # starting index
-                indexes.append(j + stringLen) # ending index
-                
                 j += stringLen -1 # jump over found string, because finding the string inside itself is impossible.
             else:
                 foundString = True
@@ -127,11 +124,11 @@ if not abort:
 
         if printLines <= tailLen: # if tail length hasn't reached above tailLen, keep printing lines
             if color:
-                k = len(indexes) -2
+                k = len(indexes) -1
                 while k >= 0:
-                    currLine = currLine[:indexes[k+1]] + "\033[0m" + currLine[indexes[k+1]:] # reset color
+                    currLine = currLine[:indexes[k] + stringLen] + "\033[0m" + currLine[indexes[k] + stringLen:] # reset color
                     currLine = currLine[:indexes[k]] + "\033[1;31m" + currLine[indexes[k]:] # set color
-                    k -= 2
+                    k -= 1
             if lineNumbers:
                 currLine = "Line " + str(i +1) + ": " + currLine 
             printLines += 1
