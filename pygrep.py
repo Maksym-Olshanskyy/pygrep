@@ -19,7 +19,7 @@ def ReadFromFile(fileName):
             saveArr.append(line.rstrip("\n"))
     return saveArr
 
-# args
+# args defaults
 findString = ""
 lineNumbers = False
 tail = False
@@ -29,6 +29,7 @@ fileName = ""
 writeFile = False
 fileToWrite = ""
 color = True
+ignoreCase = True
 
 #argument handling code
 abort = False
@@ -38,6 +39,8 @@ while i < len(sys.argv):
     match sys.argv[i]:
         case "-l":
             lineNumbers = True
+        case "-C":
+            ignoreCase = False
         case "-t":
             i += 1
             if i < len(sys.argv):
@@ -133,7 +136,12 @@ if not abort:
         while j <= len(currLine) - stringLen:
             #print("Interation: " + str(j))
             for stringIndex in range(stringLen):
-                if currLine[j + stringIndex] != findString[stringIndex]:
+                currLineChar = currLine[j + stringIndex]
+                currStringChar = findString[stringIndex]
+                if ignoreCase:
+                    currLineChar = currLineChar.lower()
+                    currStringChar = currStringChar.lower()
+                if currLineChar != currStringChar:
                     foundString = False
                     break # don't keep searching if string isn't matching
             if foundString:
