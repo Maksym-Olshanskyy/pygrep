@@ -45,12 +45,17 @@ while i < len(sys.argv):
         case "-t":
             i += 1
             if i < len(sys.argv): # if value exists
-                tailLen = int(sys.argv[i])
-                if tailLen >= 0: 
-                    tail = True
-                else:
-                    print("pygrep: tail length out of range, Aborting.")
+                try:
+                    tailLen = int(sys.argv[i])
+                except ValueError: # if value is not an integer
+                    print("pygrep: tail length invalid, Aborting.")
                     abort = True
+                if not abort: # if value is an integer
+                    if tailLen >= 0: 
+                        tail = True
+                    else: # integer is less than 0
+                        print("pygrep: tail length out of range, Aborting.")
+                        abort = True
             else:
                 print("pygrep: no quantity of lines given for -t, Aborting.")
                 abort = True
