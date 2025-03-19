@@ -42,6 +42,13 @@ while i < len(sys.argv):
             lineNumbers = True
         case "-C":
             ignoreCase = False
+        case "-s":
+            i += 1
+            if i < len(sys.argv): # if value exists
+                findString = sys.argv[i]
+            else:
+                print("pygrep: No literal value given for -s, Aborting")
+                abort = True
         case "-t":
             i += 1
             if i < len(sys.argv): # if value exists
@@ -110,6 +117,7 @@ while i < len(sys.argv):
             print("  -i file: read data from this file instead of stdin")
             print("  -o file: write output to this file instead of stdout")
             print("  -l     : prints line numbers in front of each line")
+            print("  -s str : takes following string as search string, even if it looks like an argument")
             print("  -t num : tail, quantity of lines to print after a line with a match. ")
         case _ :
             if sys.argv[i][0] == "-":
