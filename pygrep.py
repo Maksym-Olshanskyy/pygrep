@@ -75,10 +75,11 @@ while i < len(sys.argv):
         case "-o":
             i += 1
             if i < len(sys.argv): # check if file path is given
-                writeFile = True
+                
                 writeFileName = sys.argv[i]
                 try:
                     fileToWrite = open(writeFileName, "a")
+                    writeFile = True
                 except FileNotFoundError: # if folder path doesn't exist
                     print("pygrep: output directory doesn't exist, Aborting.")
                     abort = True
@@ -142,9 +143,9 @@ if not abort:
         foundString = True
         printLine = False
 
-        #for j in range(): # for each char in line
+        #for j in range(): 
         j = 0
-        while j <= len(currLine) - stringLen:
+        while j <= len(currLine) - stringLen: # for each char in line
             #print("Interation: " + str(j))
             for stringIndex in range(stringLen):
                 currLineChar = currLine[j + stringIndex]
