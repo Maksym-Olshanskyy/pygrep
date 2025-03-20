@@ -1,4 +1,4 @@
-### pygrep
+# pygrep
 A python program intended to work exactly like the grep linux command, or at least like the basic functionality of it.
 
 ## Functionality
@@ -23,7 +23,7 @@ Other minor options are:
 
 I have tried my best to account for pretty much any error that can happen.
 
-# Argument parsing
+### Argument parsing
 
 The program will ignore the error and keep running if: 
 - The user inputs an unrecognized argument
@@ -33,7 +33,7 @@ The program will abort if:
 - The user doesn't input a string to search for.
 - The `-t` argument is used without a quantity of lines given, or an invalid quantity of lines is given (ie a value below 0, or a string instead of an int.)
 
-# File related errors
+### File related errors
 
 The program will notify the user and abort if: 
 - The input file / directory doesn't exist.
@@ -42,7 +42,7 @@ The program will notify the user and abort if:
 - Whe output file isn't writable.
 - Some other issue with output file, like an i/o error
 
-## Why would you use this?
+### Why would you use this?
 
 Grep is used commonly in linux environments, where something as basic as a text editor with a search function might be unavailable, or complicated to use (looking at you vim). This program allows you to quickly search through log files or command output to find if something happened or not. For example, you might want to know what graphics card is in a linux system, so you would run `lspci`, a command that lists all PCI devices in the machine, and then search for `VGA`, which is how a graphics card device is denoted. Using pygrep, you would do that like this: `lspci | pygrep VGA`. Another example is looking through the system log, to see if, for example, the wifi driver threw some errors.
 
