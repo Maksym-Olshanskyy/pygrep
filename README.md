@@ -16,7 +16,7 @@ When writing to a file, the program will create the file if it doesn't exist. If
 Other minor options are:
 - `-C`: makes searching case sensitive.
 - `-c`: disables color (automatically disabled when writing to a file).
-- `-l`: prints line numbers before each resulting line.
+- `-t`: prints line numbers before each resulting line.
 - `-s`: takes the following string as the search string, even if it looks like an invalid argument.
 
 ## Error handling
